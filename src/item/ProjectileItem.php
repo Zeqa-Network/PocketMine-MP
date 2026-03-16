@@ -32,15 +32,19 @@ use pocketmine\world\sound\ThrowSound;
 
 abstract class ProjectileItem extends Item{
 
-	abstract public function getThrowForce() : float;
+    abstract public function getThrowForce() : float;
 
-	abstract protected function createEntity(Location $location, Player $thrower) : Throwable;
+    abstract protected function createEntity(Location $location, Player $thrower) : Throwable;
 
-	public function onClickAir(Player $player, Vector3 $directionVector, array &$returnedItems) : ItemUseResult{
-		$location = $player->getLocation();
+    protected function getPitchOffset() : float{
+        return 0.0; // Default: no offset for most projectiles
+    }
 
-		$projectile = $this->createEntity(Location::fromObject($player->getEyePos(), $player->getWorld(), $location->yaw, $location->pitch), $player);
-		$projectile->setMotion($directionVector->multiply($this->getThrowForce()));
+    public function onClickAir(Player $player, Vector3 $directionVector, array &$returnedItems) : ItemUseResult{
+        $location = $player->getLocation();
+
+        $projectile = $this->createEntity(Location::fromObject($player->getEyePos(), $player->getWorld(), $location->yaw, $location->pitch + $this->getPitchOffset()), $player);
+        $projectile->setMotion($directionVector->multiply($this->getThrowForce()));
 
 		$projectileEv = new ProjectileLaunchEvent($projectile);
 		$projectileEv->call();
