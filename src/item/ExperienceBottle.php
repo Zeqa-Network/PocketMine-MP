@@ -31,10 +31,14 @@ use pocketmine\player\Player;
 class ExperienceBottle extends ProjectileItem{
 
 	protected function createEntity(Location $location, Player $thrower) : Throwable{
-		return new ExperienceBottleEntity($location, $thrower);
+    return new ExperienceBottleEntity($location, $thrower);
 	}
-
+	
 	public function getThrowForce() : float{
-		return 0.7;
+	    return 0.7;
+	}
+	
+	protected function getPitchOffset() : float{
+	    return -20.0; // Throw upward like Java Edition
 	}
 }
