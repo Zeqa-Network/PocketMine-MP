@@ -114,7 +114,7 @@ class SplashPotion extends Throwable{
 							//getPotionEffects() is used to get COPIES to avoid accidentally modifying the same effect instance already applied to another entity
 
 							if(!($effect->getType() instanceof InstantEffect)){
-								$newDuration = (int) round($effect->getDuration() * 0.75 * $distanceMultiplier);
+								$newDuration = (int) round($effect->getDuration() * $distanceMultiplier);
 								if($newDuration < 20){
 									continue;
 								}
