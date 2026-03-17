@@ -33,15 +33,9 @@ class SlowFallingEffect extends Effect{
 	}
 
 	public function applyEffect(Living $entity, EffectInstance $instance, float $potency = 1.0, ?Entity $source = null) : void{
-		// Reset fall distance every tick to prevent fall damage (matches Java Edition)
 		$entity->resetFallDistance();
-		
-		// Cap downward velocity at 0.01 blocks/tick (like Java Edition)
-		// Java gravity is normally 0.08, capped at 0.01 = 87.5% reduction
 		$motion = $entity->getMotion();
-		if($motion->y < 0 && $motion->y < -0.01){
-			// Gradually reduce velocity to -0.01 instead of instantly setting it
-			// This creates smoother falling motion
+		if($motion->y < 0 && $motion->y < -0.01) {
 			$entity->setMotion($motion->withComponents(null, max($motion->y, -0.01), null));
 		}
 	}
