@@ -337,6 +337,8 @@ abstract class Liquid extends Transparent{
 				}
 
 				$world->setBlock($block->position, $ev->getNewState());
+
+				$world->scheduleDelayedBlockUpdate($block->position, $this->tickRate());
 			}
 		}
 	}
