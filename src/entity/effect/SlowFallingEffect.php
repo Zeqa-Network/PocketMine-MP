@@ -21,24 +21,22 @@
 
 declare(strict_types=1);
 
-namespace pocketmine\item;
+namespace pocketmine\entity\effect;
 
-use pocketmine\entity\Location;
-use pocketmine\entity\projectile\ExperienceBottle as ExperienceBottleEntity;
-use pocketmine\entity\projectile\Throwable;
-use pocketmine\player\Player;
+use pocketmine\entity\Entity;
+use pocketmine\entity\Living;
 
-class ExperienceBottle extends ProjectileItem{
+class SlowFallingEffect extends Effect{
 
-	protected function createEntity(Location $location, Player $thrower) : Throwable{
-    return new ExperienceBottleEntity($location, $thrower);
+	public function canTick(EffectInstance $instance) : bool{
+		return true;
 	}
-	
-	public function getThrowForce() : float{
-	    return 0.7;
-	}
-	
-	protected function getPitchOffset() : float{
-	    return -20.0; // Throw upward like Java Edition
+
+	public function applyEffect(Living $entity, EffectInstance $instance, float $potency = 1.0, ?Entity $source = null) : void{
+		$entity->resetFallDistance();
+		$motion = $entity->getMotion();
+		if($motion->y < 0 && $motion->y < -0.01) {
+			$entity->setMotion($motion->withComponents(null, max($motion->y, -0.01), null));
+		}
 	}
 }
